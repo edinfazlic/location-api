@@ -52,7 +52,11 @@ public class LocationsController {
     }
 
     @RequestMapping(value = "/location/filtered", method = RequestMethod.GET)
-    public List<Location> getFiltered(@RequestParam String addressId, @RequestParam Double radius) {
-        return locationService.getFilteredLocations(addressId, radius);
+    public List<Location> getFiltered(@RequestParam(required = false) String addressId,
+                                      @RequestParam(required = false) Double radius,
+                                      @RequestParam(required = false) Boolean isFilterByAddressId,
+                                      @RequestParam(required = false) Double lon,
+                                      @RequestParam(required = false) Double lat) {
+        return locationService.getFilteredLocations(addressId, radius, isFilterByAddressId, lon, lat);
     }
 }

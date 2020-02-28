@@ -16,6 +16,6 @@ public interface LocationService {
 
     Location getById(String id);
 
-    List<Location> getFilteredLocations(String id, Double radius);
+    List<Location> getFilteredLocations(String id, Double radius, Boolean isFilterByAddressId, Double lon, Double lat);
 
 }

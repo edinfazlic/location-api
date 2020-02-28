@@ -68,14 +68,30 @@ public class LocationServiceImpl implements LocationService {
      * Finds all locations on data layer which are at maximum given distance from given location.
      * @param id of a reference Location.
      * @param radius maximum distance.
+     * @param isFilterByAddressId
+     * @param lon
+     * @param lat
      * @return list of locations whose distance from reference Location is smaller or equal to given radius.
      */
-    public List<Location> getFilteredLocations(String id, Double radius) {
-        Location loc = locationRepository.findById(id).orElse(null);
-        if (null == loc) {
-            return new ArrayList<>();
+    public List<Location> getFilteredLocations(String id, Double radius, Boolean isFilterByAddressId, Double lon, Double lat) {
+        double fromLon;
+        double fromLat;
+        if (isFilterByAddressId == null || radius == null) {
+            return getAll();
+        } else if (isFilterByAddressId && id != null && !"".equals(id)) {
+            Location fromLocation = locationRepository.findById(id).orElse(null);
+            if (null == fromLocation) {
+                return new ArrayList<>();
+            }
+            fromLon = fromLocation.getLng();
+            fromLat = fromLocation.getLat();
+        } else if (!isFilterByAddressId && lon != null && lat != null) {
+            fromLat = lat;
+            fromLon = lon;
+        } else {
+            return getAll();
         }
-        double[] boundaries = GeolocationCalculator.getBoundaries(loc.getLat(), loc.getLng(), radius);
+        double[] boundaries = GeolocationCalculator.getBoundaries(fromLat, fromLon, radius);
         return locationRepository.findByLatBetweenAndLngBetween(boundaries[0], boundaries[1], boundaries[2], boundaries[3]);
     }
 }
