@@ -5,10 +5,13 @@ import com.location_api.services.LocationService;
 import com.location_api.services.impl.LocationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,8 +19,8 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
-@CrossOrigin("*")
+@RequestMapping("/location")
+@CrossOrigin("*") // todo: remove wildcard
 public class LocationsController {
     private LocationService locationService;
 
@@ -26,32 +29,32 @@ public class LocationsController {
         this.locationService = locationService;
     }
 
-    @RequestMapping(value = "/location", method = RequestMethod.POST)
-    public Location addLocation(@Valid @RequestBody Location location) {
+    @PostMapping()
+    public Location create(@Valid @RequestBody Location location) {
         return locationService.createLocation(location);
     }
 
-    @RequestMapping(value = "/location", method = RequestMethod.PUT)
+    @PutMapping()
     public void modify(@Valid @RequestBody Location location) {
         locationService.modifyLocation(location);
     }
 
-    @RequestMapping(value = "/location/{id}", method = RequestMethod.DELETE)
-    public void deleteLocation(@PathVariable String id) {
+    @DeleteMapping(value = "/{id}")
+    public void delete(@PathVariable String id) {
         locationService.deleteLocation(id);
     }
 
-    @RequestMapping(value = "/location", method = RequestMethod.GET)
-    public List<Location> getAllLocations() {
+    @GetMapping(value = "/all")
+    public List<Location> getAll() {
         return locationService.getAll();
     }
 
-    @RequestMapping(value = "/location/{id}", method = RequestMethod.GET)
-    public Location getSpecificLocation(@PathVariable("id") String id) {
+    @GetMapping(value = "/{id}")
+    public Location getSpecific(@PathVariable("id") String id) {
         return locationService.getById(id);
     }
 
-    @RequestMapping(value = "/location/filtered", method = RequestMethod.GET)
+    @GetMapping(value = "/filtered")
     public List<Location> getFiltered(@RequestParam(required = false) String addressId,
                                       @RequestParam(required = false) Double radius,
                                       @RequestParam(required = false) Boolean isFilterByAddressId,
