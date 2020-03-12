@@ -39,7 +39,7 @@ Application showcases knowledge of:
 
 ## Requirements
 1. Java - 11.x
-1. Maven - 4.x.x
+1. Maven - 3.x.x
 1. MongoDB - local database, host: localhost:27017, database: test; *or see environment variable under **Development server*** 
 
 ## Development server
